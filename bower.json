@@ -1,0 +1,28 @@
+{
+  "name": "amcharts-angular",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ThumbsAlmighty/amCharts-Angular",
+  "authors": [
+    "Grant Stevens <grant.stevens007@gmail.com>"
+  ],
+  "description": "Angular directive for implementing amCharts",
+  "main": "dist/amChartsDirective.js",
+  "keywords": [
+    "Angular",
+    "amCharts",
+    "directive",
+    "Angularjs",
+    "chart"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "amcharts": "~3.13.0"
+  }
+}
