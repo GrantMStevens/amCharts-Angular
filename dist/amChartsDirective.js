@@ -1,4 +1,4 @@
-angular.module('amChartsDirective').directive('amChart', function() {
+angular.module('amChartsDirective', []).directive('amChart', function() {
 		return {
 			restrict: 'E',
 			replace: true,
