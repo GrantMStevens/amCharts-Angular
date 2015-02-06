@@ -2,4 +2,4 @@
 Angular directive for amCharts library
 
 
-Documentation coming soon.
+<h2>Angular directive for amCharts</h2>
