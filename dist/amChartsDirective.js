@@ -48,6 +48,9 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
 					categoryAxis.titleFontSize = $scope.options.xAxisTitleFontSize || 16;
 					categoryAxis.markPeriodChange = $scope.options.xAxisMarkPeriodChange === undefined ? false : $scope.options.xAxisMarkPeriodChange;
 					categoryAxis.centerLabelOnFullPeriod = $scope.options.centerLabelOnFullPeriod === undefined ? false : $scope.options.centerLabelOnFullPeriod;
+					categoryAxis.minPeriod = $scope.options.xAxisMinPeriod || 'DD';
+					categoryAxis.autoGridCount = $scope.options.autoGridCount === undefined ? true : $scope.options.autoGridCount;
+					categoryAxis.gridCount = $scope.options.gridCount || 5;
 
 					// configure value axis
 					var valueAxis = new AmCharts.ValueAxis();
