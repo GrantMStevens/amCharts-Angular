@@ -1,3 +1,5 @@
+// 0.0.3
+
 angular.module('amChartsDirective', []).directive('amChart', function() {
 		return {
 			restrict: 'E',
