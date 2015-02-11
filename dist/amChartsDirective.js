@@ -17,9 +17,11 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
 				// we can't render a chart without any data
 				if ($scope.options.data) {
 
+					var o = $scope.options;
+
 					// set height and width
-					var height = $scope.options.height || '400px';
-					var width = $scope.options.width || '600px';
+					var height = o.height || '400px';
+					var width = o.width || '600px';
 
 					$el.css({
 						'height': height,
@@ -28,63 +30,64 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
 
 					// instantiate new chart object
 					var chart = new AmCharts.AmSerialChart();
-					chart.dataProvider = $scope.options.data;
+					chart.dataProvider = o.data;
 					// if a category field is not specified, attempt to use the first field from an object in the array
-					chart.categoryField = $scope.options.categoryField || Object.keys($scope.options.data[0])[0];
-					chart.autoMargins = $scope.options.autoMargins === undefined ? true : $scope.options.autoMargins;
-					chart.marginLeft = $scope.options.marginLeft || 0;
-					chart.marginBottom = $scope.options.marginBottom || 0;
-					chart.marginRight = $scope.options.marginRight  || 0;
-					chart.startDuration = $scope.options.startDuration === undefined ? 0.5 : $scope.options.startDuration;
+					chart.categoryField = o.categoryField || Object.keys(o.data[0])[0];
+					chart.autoMargins = o.autoMargins === undefined ? true : o.autoMargins;
+					chart.marginLeft = o.marginLeft || 0;
+					chart.marginBottom = o.marginBottom || 0;
+					chart.marginRight = o.marginRight  || 0;
+					chart.startDuration = o.startDuration === undefined ? 0.5 : o.startDuration;
 
 					// configure category axis
 					var categoryAxis = chart.categoryAxis;
-					categoryAxis.parseDates = $scope.options.xAxisParseDates === undefined ? true : $scope.options.xAxisParseDates;
-					categoryAxis.equalSpacing = $scope.options.xAxisEqualSpacing === undefined ? false : $scope.options.xAxisEqualSpacing;
-					categoryAxis.labelRotation = $scope.options.xAxisLabelRotation || 0;
-					categoryAxis.dashLength = $scope.options.xAxisDashLength || 1;
-					categoryAxis.gridPosition = $scope.options.xAxisGridPosition || 'start';
-					categoryAxis.labelOffset = $scope.options.xAxisLabelOffset || 0;
-					categoryAxis.title = $scope.options.xAxisTitle || '';
-					categoryAxis.titleBold = $scope.options.xAxisTitleBold === undefined ? true : $scope.options.xAxisTitleBold;
-					categoryAxis.titleFontSize = $scope.options.xAxisTitleFontSize || 16;
-					categoryAxis.markPeriodChange = $scope.options.xAxisMarkPeriodChange === undefined ? false : $scope.options.xAxisMarkPeriodChange;
-					categoryAxis.centerLabelOnFullPeriod = $scope.options.centerLabelOnFullPeriod === undefined ? false : $scope.options.centerLabelOnFullPeriod;
-					categoryAxis.minPeriod = $scope.options.xAxisMinPeriod || 'DD';
-					categoryAxis.autoGridCount = $scope.options.autoGridCount === undefined ? true : $scope.options.autoGridCount;
-					categoryAxis.gridCount = $scope.options.gridCount || 5;
+					categoryAxis.parseDates = o.xAxisParseDates === undefined ? true : o.xAxisParseDates;
+					categoryAxis.equalSpacing = o.xAxisEqualSpacing === undefined ? false : o.xAxisEqualSpacing;
+					categoryAxis.labelRotation = o.xAxisLabelRotation || 0;
+					categoryAxis.dashLength = o.xAxisDashLength || 1;
+					categoryAxis.gridPosition = o.xAxisGridPosition || 'start';
+					categoryAxis.labelOffset = o.xAxisLabelOffset || 0;
+					categoryAxis.title = o.xAxisTitle || '';
+					categoryAxis.titleBold = o.xAxisTitleBold === undefined ? true : o.xAxisTitleBold;
+					categoryAxis.titleFontSize = o.xAxisTitleFontSize || 16;
+					categoryAxis.markPeriodChange = o.xAxisMarkPeriodChange === undefined ? false : o.xAxisMarkPeriodChange;
+					categoryAxis.centerLabelOnFullPeriod = o.centerLabelOnFullPeriod === undefined ? false : o.centerLabelOnFullPeriod;
+					categoryAxis.minPeriod = o.xAxisMinPeriod || 'DD';
+					categoryAxis.autoGridCount = o.autoGridCount === undefined ? true : o.autoGridCount;
+					categoryAxis.gridCount = o.gridCount || 5;
 
 					// configure value axis
 					var valueAxis = new AmCharts.ValueAxis();
-					valueAxis.inside = $scope.options.valueAxisInside === undefined ? false : $scope.options.valueAxisInside;
-					valueAxis.dashLength = $scope.options.valueAxisDashLength || 1;
-					valueAxis.title = $scope.options.valueAxisTitle || '';
-					valueAxis.offset = $scope.options.valueAxisOffset || 0;
+					valueAxis.inside = o.valueAxisInside === undefined ? false : o.valueAxisInside;
+					valueAxis.dashLength = o.valueAxisDashLength || 1;
+					valueAxis.title = o.valueAxisTitle || '';
+					valueAxis.offset = o.valueAxisOffset || 0;
 					chart.addValueAxis(valueAxis);
 
 
 					// create the graph
 					var graph = new AmCharts.AmGraph();
 					// if a category field is not specified, attempt to use the second field from an object in the array
-					graph.valueField = $scope.options.valueField || Object.keys($scope.options.data[0])[1];
-					graph.colorField = $scope.options.graphColorField || '';
-					graph.balloonText = $scope.options.baloonTemplate || '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
-					graph.type = $scope.options.graphType || 'column';
-					graph.lineAlpha = $scope.options.graphLineAlpha || 1;
-					graph.fillAlphas = $scope.options.graphFillAlphas || 0.5;
-					graph.offset = $scope.options.graphOffset || 0;
-					graph.pointPosition = $scope.options.graphPointPosition || 'middle';
-					graph.lineColor = $scope.options.graphLineColor || '#45AADC';
+					graph.valueField = o.valueField || Object.keys(o.data[0])[1];
+					graph.colorField = o.graphColorField || '';
+					graph.balloonText = o.baloonTemplate || '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
+					graph.type = o.graphType || 'column';
+					graph.lineAlpha = o.graphLineAlpha || 1;
+					graph.fillAlphas = o.graphFillAlphas || 0.5;
+					graph.offset = o.graphOffset || 0;
+					graph.pointPosition = o.graphPointPosition || 'middle';
+					graph.lineColor = o.graphLineColor || '#45AADC';
 					chart.addGraph(graph);
 
 					// cursor
 					var chartCursor = new AmCharts.ChartCursor();
-					chartCursor.cursorAlpha = $scope.options.cursorAlpha || 0;
-					chartCursor.zoomable = $scope.options.cursorZoomable === undefined ? false : $scope.options.cursorZoomable;
-					chartCursor.categoryBalloonEnabled = $scope.options.categoryBalloonEnabled === undefined ? false : $scope.options.categoryBalloonEnabled;
+					chartCursor.cursorAlpha = o.cursorAlpha || 0;
+					chartCursor.zoomable = o.cursorZoomable === undefined ? false : o.cursorZoomable;
+					chartCursor.categoryBalloonEnabled = o.categoryBalloonEnabled === undefined ? false : o.categoryBalloonEnabled;
+					chartCursor.categoryBalloonDateFormat = o.categoryBalloonDateFormat || 'MMM DD, YYYY';
 					chart.addChartCursor(chartCursor);
 
-					chart.creditsPosition = $scope.options.creditsPosition || 'top-right';
+					chart.creditsPosition = o.creditsPosition || 'top-right';
 
 					// WRITE
 					chart.write(id);
