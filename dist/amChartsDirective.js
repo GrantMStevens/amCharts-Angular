@@ -1,4 +1,4 @@
-// 0.0.3
+// 0.0.3 
 
 angular.module('amChartsDirective', []).directive('amChart', function() {
 		return {
