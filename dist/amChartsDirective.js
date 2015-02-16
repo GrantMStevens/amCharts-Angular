@@ -62,6 +62,9 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
 					valueAxis.dashLength = o.valueAxisDashLength || 1;
 					valueAxis.title = o.valueAxisTitle || '';
 					valueAxis.offset = o.valueAxisOffset || 0;
+					valueAxis.precision = o.valueAxisPrecision || 0;
+					valueAxis.showLastLabel = o.valueAxisShowLastLabel === undefined ? true : o.valueAxisShowLastLabel;
+					valueAxis.showFirstLabel = o.valueAxisShowFirstLabel === undefined ? true : o.valueAxisShowFirstLabel;
 					chart.addValueAxis(valueAxis);
 
 
