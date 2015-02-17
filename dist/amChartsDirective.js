@@ -65,22 +65,34 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
 					valueAxis.precision = o.valueAxisPrecision || 0;
 					valueAxis.showLastLabel = o.valueAxisShowLastLabel === undefined ? true : o.valueAxisShowLastLabel;
 					valueAxis.showFirstLabel = o.valueAxisShowFirstLabel === undefined ? true : o.valueAxisShowFirstLabel;
+					valueAxis.stackType = o.valueAxisStackType || 'none';
+					valueAxis.labelFunction = o.valueAxisLabelFunction;
+					valueAxis.unit = o.valueAxisUnit;
 					chart.addValueAxis(valueAxis);
 
 
-					// create the graph
-					var graph = new AmCharts.AmGraph();
-					// if a category field is not specified, attempt to use the second field from an object in the array
-					graph.valueField = o.valueField || Object.keys(o.data[0])[1];
-					graph.colorField = o.graphColorField || '';
-					graph.balloonText = o.baloonTemplate || '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
-					graph.type = o.graphType || 'column';
-					graph.lineAlpha = o.graphLineAlpha || 1;
-					graph.fillAlphas = o.graphFillAlphas || 0.5;
-					graph.offset = o.graphOffset || 0;
-					graph.pointPosition = o.graphPointPosition || 'middle';
-					graph.lineColor = o.graphLineColor || '#45AADC';
-					chart.addGraph(graph);
+					//reusable function to create graph
+					function addGraph(g){
+						var graph = new AmCharts.AmGraph();
+						// if a category field is not specified, attempt to use the second field from an object in the array as a default value
+						graph.valueField = Object.keys(o.data[0])[1];
+						graph.balloonText = '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
+						var keys = Object.keys(g);
+						// iterate over all of the properties in the graph object and apply them to the new AmGraph
+						for (var i=0; i<keys.length; i++){
+							graph[keys[i]] = g[keys[i]];
+						}
+
+						chart.addGraph(graph);
+					}
+
+					// create the graphs
+					if (o.graphs && o.graphs.length){
+						for (var i=0; i< o.graphs.length; i++){
+							addGraph(o.graphs[i]);
+						}
+					}
+
 
 					// cursor
 					var chartCursor = new AmCharts.ChartCursor();
