@@ -1,118 +1,139 @@
-// 0.0.3 
+'use strict';
+// 1.0.0
 
 angular.module('amChartsDirective', []).directive('amChart', function() {
-		return {
-			restrict: 'E',
-			replace: true,
-            scope: {
-				options: '='
-			},
-			template: '<div class="amchart"></div>',
-			'link': function($scope, $el) {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: {
+      options: '=',
+      height: '=',
+      width: '='
+    },
+    template: '<div class="amchart"></div>',
+    'link': function($scope, $el) {
 
-				// use existing outer id to create new id
-				var id = $el[0].id + '_chart';
-				$el.attr('id', id);
+      // use existing outer id to create new id
+      var id = $el[0].id + '_chart';
+      $el.attr('id', id);
 
-				// we can't render a chart without any data
-				if ($scope.options.data) {
+      // we can't render a chart without any data
+      if ($scope.options.data) {
 
-					var o = $scope.options;
+        var o = $scope.options;
 
-					// set height and width
-					var height = o.height || '400px';
-					var width = o.width || '600px';
+        // set height and width
+        var height = $scope.height || '400px';
+        var width = $scope.width || '600px';
 
-					$el.css({
-						'height': height,
-						'width': width
-					});
+        $el.css({
+          'height': height,
+          'width': width
+        });
 
-					// instantiate new chart object
-					var chart = new AmCharts.AmSerialChart();
-					chart.dataProvider = o.data;
-					// if a category field is not specified, attempt to use the first field from an object in the array
-					chart.categoryField = o.categoryField || Object.keys(o.data[0])[0];
-					chart.autoMargins = o.autoMargins === undefined ? true : o.autoMargins;
-					chart.marginLeft = o.marginLeft || 0;
-					chart.marginBottom = o.marginBottom || 0;
-					chart.marginRight = o.marginRight  || 0;
-					chart.startDuration = o.startDuration === undefined ? 0.5 : o.startDuration;
+        // instantiate new chart object
+        var chart = new AmCharts.AmSerialChart();
 
-					// configure category axis
-					var categoryAxis = chart.categoryAxis;
-					categoryAxis.parseDates = o.xAxisParseDates === undefined ? true : o.xAxisParseDates;
-					categoryAxis.equalSpacing = o.xAxisEqualSpacing === undefined ? false : o.xAxisEqualSpacing;
-					categoryAxis.labelRotation = o.xAxisLabelRotation || 0;
-					categoryAxis.dashLength = o.xAxisDashLength || 1;
-					categoryAxis.gridPosition = o.xAxisGridPosition || 'start';
-					categoryAxis.labelOffset = o.xAxisLabelOffset || 0;
-					categoryAxis.title = o.xAxisTitle || '';
-					categoryAxis.titleBold = o.xAxisTitleBold === undefined ? true : o.xAxisTitleBold;
-					categoryAxis.titleFontSize = o.xAxisTitleFontSize || 16;
-					categoryAxis.markPeriodChange = o.xAxisMarkPeriodChange === undefined ? false : o.xAxisMarkPeriodChange;
-					categoryAxis.centerLabelOnFullPeriod = o.centerLabelOnFullPeriod === undefined ? false : o.centerLabelOnFullPeriod;
-					categoryAxis.minPeriod = o.xAxisMinPeriod || 'DD';
-					categoryAxis.autoGridCount = o.autoGridCount === undefined ? true : o.autoGridCount;
-					categoryAxis.gridCount = o.gridCount || 5;
+        /** set some default values that amCharts doesnt provide **/
+        chart.dataProvider = o.data;
+        // if a category field is not specified, attempt to use the first field from an object in the array
+        chart.categoryField = o.categoryField || Object.keys(o.data[0])[0];
+        chart.startDuration = 0.5; // default animation length, because everyone loves a little pizazz
 
-					// configure value axis
-					var valueAxis = new AmCharts.ValueAxis();
-					valueAxis.inside = o.valueAxisInside === undefined ? false : o.valueAxisInside;
-					valueAxis.dashLength = o.valueAxisDashLength || 1;
-					valueAxis.title = o.valueAxisTitle || '';
-					valueAxis.offset = o.valueAxisOffset || 0;
-					valueAxis.precision = o.valueAxisPrecision || 0;
-					valueAxis.showLastLabel = o.valueAxisShowLastLabel === undefined ? true : o.valueAxisShowLastLabel;
-					valueAxis.showFirstLabel = o.valueAxisShowFirstLabel === undefined ? true : o.valueAxisShowFirstLabel;
-					valueAxis.stackType = o.valueAxisStackType || 'none';
-					valueAxis.labelFunction = o.valueAxisLabelFunction;
-					valueAxis.unit = o.valueAxisUnit;
-					chart.addValueAxis(valueAxis);
+        // AutoMargin is on by default, but the default 20px all around seems to create unnecessary white space around the control
+        chart.autoMargins = true;
+        chart.marginTop = 0;
+        chart.marginLeft = 0;
+        chart.marginBottom = 0;
+        chart.marginRight = 0;
+
+        // modify default creditsPosition
+        chart.creditsPosition = o.creditsPosition || 'top-right';
+
+        var chartKeys = Object.keys(o);
+        for (var i=0; i<chartKeys.length; i++){
+          if (typeof o[chartKeys[i]] !== 'object' && typeof o[chartKeys[i]] !== 'function'){
+            chart[chartKeys[i]] = o[chartKeys[i]];
+          }
+        }
 
 
-					//reusable function to create graph
-					function addGraph(g){
-						var graph = new AmCharts.AmGraph();
-						// if a category field is not specified, attempt to use the second field from an object in the array as a default value
-						graph.valueField = Object.keys(o.data[0])[1];
-						graph.balloonText = '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
-						var keys = Object.keys(g);
-						// iterate over all of the properties in the graph object and apply them to the new AmGraph
-						for (var i=0; i<keys.length; i++){
-							graph[keys[i]] = g[keys[i]];
-						}
+        // Assign Category Axis Properties
+        if(o.categoryAxis){
+          var categoryAxis = chart.categoryAxis;
+          /* if we need to create any default values, we should assign them here */
+          categoryAxis.parseDates = true;
 
-						chart.addGraph(graph);
-					}
+          var keys = Object.keys(o.categoryAxis);
+          for (var i=0; i<keys.length; i++){
+            if (typeof o.categoryAxis[keys[i]] !== 'object'){
+              categoryAxis[keys[i]] = o.categoryAxis[keys[i]];
+            }
+          }
+          chart.categoryAxis = categoryAxis;
+        }
 
-					// create the graphs
-					if (o.graphs && o.graphs.length){
-						for (var i=0; i< o.graphs.length; i++){
-							addGraph(o.graphs[i]);
-						}
-					}
+        // Create value axis
+        var valueAxis = new AmCharts.ValueAxis();
+        /* if we need to create any default values, we should assign them here */
 
+        if (o.valueAxis){
+          var keys = Object.keys(o.valueAxis);
+          for (var i=0; i<keys.length; i++){
+            if (typeof o.valueAxis[keys[i]] !== 'object'){
+              valueAxis[keys[i]] = o.valueAxis[keys[i]];
+            }
+          }
+        }
+        chart.addValueAxis(valueAxis);
 
-					// cursor
-					var chartCursor = new AmCharts.ChartCursor();
-					chartCursor.cursorAlpha = o.cursorAlpha || 0;
-					chartCursor.zoomable = o.cursorZoomable === undefined ? false : o.cursorZoomable;
-					chartCursor.categoryBalloonEnabled = o.categoryBalloonEnabled === undefined ? false : o.categoryBalloonEnabled;
-					chartCursor.categoryBalloonDateFormat = o.categoryBalloonDateFormat || 'MMM DD, YYYY';
-					chart.addChartCursor(chartCursor);
+        //reusable function to create graph
+        var addGraph = function(g){
+          var graph = new AmCharts.AmGraph();
+          /** set some default values that amCharts doesnt provide **/
+            // if a category field is not specified, attempt to use the second field from an object in the array as a default value
+          graph.valueField = Object.keys(o.data[0])[1];
+          graph.balloonText = '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
+          if (g){
+            var keys = Object.keys(g);
+            // iterate over all of the properties in the graph object and apply them to the new AmGraph
+            for (var i=0; i<keys.length; i++){
+              graph[keys[i]] = g[keys[i]];
+            }
+          }
+          chart.addGraph(graph);
+        }
 
-					chart.creditsPosition = o.creditsPosition || 'top-right';
+        // create the graphs
+        if (o.graphs && o.graphs.length > 0){
+          for (var i=0; i< o.graphs.length; i++){
+            addGraph(o.graphs[i]);
+          }
+        } else {
+          addGraph();
+        }
 
-					// WRITE
-					chart.write(id);
+        var chartCursor = new AmCharts.ChartCursor();
+        if (o.chartCursor){
+          var keys = Object.keys(o.chartCursor);
+          for (var i=0; i<keys.length; i++){
+            if (typeof o.chartCursor[keys[i]] !== 'object'){
+              chartCursor[keys[i]] = o.chartCursor[keys[i]];
+            }
+          }
+        }
+        chart.addChartCursor(chartCursor);
 
-					$scope.$on('triggerChartAnimate', function(){
-						chart.animateAgain();
-					});
+        // WRITE
+        chart.write(id);
 
-				}
+        $scope.$on('amCharts.triggerChartAnimate', function(){
+          chart.animateAgain();
+        });
 
-			}
-		};
-	});
+      }
+
+    }
+  };
+});
+
