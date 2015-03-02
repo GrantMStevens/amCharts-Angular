@@ -42,9 +42,9 @@
                 parseDates: true,
                 gridPosition: "middle"
             },
-            valueAxis: {
+            valueAxes: [{
 				showLastLabel: false,
-			},
+			}],
 			graphs: [{
 				type: 'line',
 				pointPosition: 'start',
