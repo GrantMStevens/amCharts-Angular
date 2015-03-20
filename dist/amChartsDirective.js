@@ -109,7 +109,7 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
             var graph = new AmCharts.AmGraph();
             /** set some default values that amCharts doesnt provide **/
               // if a category field is not specified, attempt to use the second field from an object in the array as a default value
-            graph.valueField = Object.keys(o.data[0])[1];
+            graph.valueField = g.valueField || Object.keys(o.data[0])[1];
             graph.balloonText = '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
             if (g) {
               var keys = Object.keys(g);
@@ -119,7 +119,7 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
               }
             }
             chart.addGraph(graph);
-          }
+          };
 
           // create the graphs
           if (o.graphs && o.graphs.length > 0) {
