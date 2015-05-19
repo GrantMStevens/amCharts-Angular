@@ -73,8 +73,10 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
 
               var keys = Object.keys(o.categoryAxis);
               for (var i = 0; i < keys.length; i++) {
-                if (typeof o.categoryAxis[keys[i]] !== 'object') {
+                if (!angular.isObject(o.categoryAxis[keys[i]]) || angular.isArray(o.categoryAxis[keys[i]])) {
                   categoryAxis[keys[i]] = o.categoryAxis[keys[i]];
+                } else {
+                  console.log('Stripped categoryAxis obj ' + keys[i]);
                 }
               }
               chart.categoryAxis = categoryAxis;
