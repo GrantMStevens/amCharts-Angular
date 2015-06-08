@@ -34,9 +34,9 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
 
           // instantiate new chart object
           if (o.type === 'xy') {
-            chart = new AmCharts.AmXYChart();
+            chart = o.theme ? new AmCharts.AmXYChart(AmCharts.themes[o.theme]) : new AmCharts.AmXYChart();
           } else {
-            chart = new AmCharts.AmSerialChart();
+            chart = o.theme ? new AmCharts.AmSerialChart(AmCharts.themes[o.theme]) : new AmCharts.AmSerialChart();
           }
 
           /** set some default values that amCharts doesnt provide **/

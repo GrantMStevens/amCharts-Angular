@@ -16,44 +16,59 @@
 
 #### Inject angular module dependency
 
-        angular.module('MyModule, ['amChartsDirective'])
+        angular.module('MyModule', ['amChartsDirective'])
 
-#### Quick example
+#### [JS Fiddle Example](http://jsfiddle.net/w3vpc35o/4/)
 
-        <am-chart id="myFirstChart" options="amChartOptions" height="400" width="600"></am-chart>
+#### Quick sample code
 
-        $scope.amChartOptions = {
-            data: [
-                {key: '1/22/2015', value: '0.5'},
-                {key: '1/23/2015', value: '0.1'},
-                {key: '1/24/2015', value: '0.23'},
-                {key: '1/25/2015', value: '0.7'},
-                {key: '1/26/2015', value: '0.98'},
-                {key: '1/27/2015', value: '1.1'},
-                {key: '1/28/2015', value: '0.15'},
-                {key: '1/29/2015', value: '0.23'}
-            ],
-            type: "serial",
-            "categoryAxis": {
-                labelOffset: 20,
-                autoGridCount: false,
-                gridCount: 7,
-                centerLabelOnFullPeriod: true,
-                parseDates: true,
-                gridPosition: "middle"
-            },
-            valueAxes: [{
-				showLastLabel: false,
-			}],
-			graphs: [{
-				type: 'line',
-				pointPosition: 'start',
-				lineColor: '#45AADC'
-			}],
-			chartCursor: {
-				categoryBalloonDateFormat: 'MMM DD HH:MM A'
-			}
-        }
+        <am-chart id="myFirstChart" options="amChartOptions" height="100%" width="100%"></am-chart>
+
+
+``` javascript
+$scope.amChartOptions = {
+        data: [{
+            year: 2005,
+            income: 23.5,
+            expenses: 18.1
+        }, {
+            year: 2006,
+            income: 26.2,
+            expenses: 22.8
+        }, {
+            year: 2007,
+            income: 30.1,
+            expenses: 23.9
+        }, {
+            year: 2008,
+            income: 29.5,
+            expenses: 25.1
+        }, {
+            year: 2009,
+            income: 24.6,
+            expenses: 25
+        }],
+        type: "serial",
+
+        categoryField: "year",
+        rotate: true,
+
+        categoryAxis: {
+            gridPosition: "start",
+            parseDates: false
+        },
+        valueAxes: [{
+            position: "top",
+            title: "Million USD"
+        }],
+        graphs: [{
+            type: "column",
+            title: "Income",
+            valueField: "income",
+            fillAlphas: 1,
+        }]
+    }
+```
     
     
 ##### If you do not specify a category field or a value field, the directive will assume the category field is at index [0] and the value field is at index [1]. Using the example above, 'key' would be the category field, and 'value' would be the value field.
