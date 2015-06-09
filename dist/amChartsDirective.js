@@ -1,6 +1,7 @@
 'use strict';
 // 1.0.0
 
+
 angular.module('amChartsDirective', []).directive('amChart', function() {
   return {
     restrict: 'E',
@@ -142,6 +143,24 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
             }
           }
           chart.addChartCursor(chartCursor);
+            
+          if (o.legend){
+              var legend = new AmCharts.AmLegend();
+              var keys = Object.keys(o.legend);
+              for (var i = 0; i < keys.length; i++) {
+                  legend[keys[i]] = o.legend[keys[i]];
+              }
+              chart.legend = legend;
+          }
+            
+          if (o.chartScrollbar){
+            var scrollbar = new AmCharts.ChartScrollbar();
+            var keys = Object.keys(o.chartScrollbar);
+            for (var i = 0; i < keys.length; i++) {
+              scrollbar[keys[i]] = o.chartScrollbar[keys[i]];
+            }
+            chart.chartScrollbar = scrollbar;
+          }
 
           // WRITE
           chart.write(id);
@@ -184,4 +203,3 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
     }
   };
 });
-
