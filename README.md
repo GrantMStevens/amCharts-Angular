@@ -9,21 +9,30 @@
 ## 2. Create Angular application
 
 #### Add script references
-
-        <script type="text/javascript" src="lib/amcharts/dist/amcharts/amcharts.js"></script>
-        <script type="text/javascript" src="lib/amcharts/dist/amcharts/serial.js"></script>
-        <script type="text/javascript" src="lib/amcharts-angular/dist/amChartsDirective.js"></script>
+        
+``` javascript        
+// AmCharts Library references
+<script type="text/javascript" src="lib/amcharts/dist/amcharts/amcharts.js"></script>
+<script type="text/javascript" src="lib/amcharts/dist/amcharts/serial.js"></script>
+// amChartsDirective
+<script type="text/javascript" src="lib/amcharts-angular/dist/amChartsDirective.js"></script>
+```
 
 #### Inject angular module dependency
 
-        angular.module('MyModule', ['amChartsDirective'])
+``` javascript
+angular.module('MyModule', ['amChartsDirective'])
+```
 
-#### [JS Fiddle Example](http://jsfiddle.net/w3vpc35o/4/)
+
+#### [You can play with a working JS Fiddle example here!](http://jsfiddle.net/w3vpc35o/10/)
+
 
 #### Quick sample code
 
-        <am-chart id="myFirstChart" options="amChartOptions" height="100%" width="100%"></am-chart>
-
+``` html
+<am-chart id="myFirstChart" options="amChartOptions" height="100%" width="100%"></am-chart>
+```
 
 ``` javascript
 $scope.amChartOptions = {
@@ -49,10 +58,16 @@ $scope.amChartOptions = {
             expenses: 25
         }],
         type: "serial",
-
+        
         categoryField: "year",
         rotate: true,
-
+        pathToImages: 'https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.13.0/images/',
+        legend: {
+            enabled: true
+        },
+        chartScrollbar: {
+            enabled: true,
+        },
         categoryAxis: {
             gridPosition: "start",
             parseDates: false
