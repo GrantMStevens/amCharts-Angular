@@ -86,7 +86,7 @@ $scope.amChartOptions = {
 ```
     
     
-##### If you do not specify a category field or a value field, the directive will assume the category field is at index [0] and the value field is at index [1]. Using the example above, 'key' would be the category field, and 'value' would be the value field.
+##### If you do not specify a category field or a value field, the directive will assume the category field is at index [0] and the value field is at index [1]. Using the example above, 'year' would be the category field, and 'income' would be the value field.
     
     
 #### For a list of exposed configuration options, please look at the [amCharts API documentation](http://docs.amcharts.com/3/javascriptcharts).
