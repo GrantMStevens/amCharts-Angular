@@ -1,5 +1,5 @@
 'use strict';
-// 1.0.1
+// 1.0.2
 
 
 angular.module('amChartsDirective', []).directive('amChart', ['$q', function($q) {
@@ -50,11 +50,11 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function($q)
             chart.startDuration = 0.5; // default animation length, because everyone loves a little pizazz
 
             // AutoMargin is on by default, but the default 20px all around seems to create unnecessary white space around the control
-            chart.autoMargins = true;
-            chart.marginTop = 0;
-            chart.marginLeft = 0;
-            chart.marginBottom = 0;
-            chart.marginRight = 0;
+            chart.autoMargins = o.autoMargins || true;
+            chart.marginTop = o.marginTop || 0;
+            chart.marginLeft = o.marginLeft || 0;
+            chart.marginBottom = o.marginBottom || 0;
+            chart.marginRight = o.marginRight || 0;
 
             // modify default creditsPosition
             chart.creditsPosition = o.creditsPosition || 'top-right';
