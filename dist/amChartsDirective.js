@@ -1,8 +1,8 @@
 'use strict';
-// 1.0.0
+// 1.0.1
 
 
-angular.module('amChartsDirective', []).directive('amChart', function() {
+angular.module('amChartsDirective', []).directive('amChart', ['$q', function($q) {
   return {
     restrict: 'E',
     replace: true,
@@ -41,129 +41,133 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
           }
 
           /** set some default values that amCharts doesnt provide **/
-          chart.dataProvider = o.data;
-          // if a category field is not specified, attempt to use the first field from an object in the array
-          chart.categoryField = o.categoryField || Object.keys(o.data[0])[0];
-          chart.startDuration = 0.5; // default animation length, because everyone loves a little pizazz
+          $q.when(o.data)
+            .then(function (data) {
 
-          // AutoMargin is on by default, but the default 20px all around seems to create unnecessary white space around the control
-          chart.autoMargins = true;
-          chart.marginTop = 0;
-          chart.marginLeft = 0;
-          chart.marginBottom = 0;
-          chart.marginRight = 0;
+            chart.dataProvider = data;
+            // if a category field is not specified, attempt to use the first field from an object in the array
+            chart.categoryField = o.categoryField || Object.keys(o.data[0])[0];
+            chart.startDuration = 0.5; // default animation length, because everyone loves a little pizazz
 
-          // modify default creditsPosition
-          chart.creditsPosition = o.creditsPosition || 'top-right';
+            // AutoMargin is on by default, but the default 20px all around seems to create unnecessary white space around the control
+            chart.autoMargins = true;
+            chart.marginTop = 0;
+            chart.marginLeft = 0;
+            chart.marginBottom = 0;
+            chart.marginRight = 0;
 
-          var chartKeys = Object.keys(o);
-          for (var i = 0; i < chartKeys.length; i++) {
-            if (typeof o[chartKeys[i]] !== 'object' && typeof o[chartKeys[i]] !== 'function') {
-              chart[chartKeys[i]] = o[chartKeys[i]];
+            // modify default creditsPosition
+            chart.creditsPosition = o.creditsPosition || 'top-right';
+
+            var chartKeys = Object.keys(o);
+            for (var i = 0; i < chartKeys.length; i++) {
+              if (typeof o[chartKeys[i]] !== 'object' && typeof o[chartKeys[i]] !== 'function') {
+                chart[chartKeys[i]] = o[chartKeys[i]];
+              }
             }
-          }
 
 
-          // Assign Category Axis Properties
-          if (o.categoryAxis) {
-            var categoryAxis = chart.categoryAxis;
+            // Assign Category Axis Properties
+            if (o.categoryAxis) {
+              var categoryAxis = chart.categoryAxis;
 
-            if (categoryAxis) {
-              /* if we need to create any default values, we should assign them here */
-              categoryAxis.parseDates = true;
+              if (categoryAxis) {
+                /* if we need to create any default values, we should assign them here */
+                categoryAxis.parseDates = true;
 
-              var keys = Object.keys(o.categoryAxis);
+                var keys = Object.keys(o.categoryAxis);
+                for (var i = 0; i < keys.length; i++) {
+                  if (!angular.isObject(o.categoryAxis[keys[i]]) || angular.isArray(o.categoryAxis[keys[i]])) {
+                    categoryAxis[keys[i]] = o.categoryAxis[keys[i]];
+                  } else {
+                    console.log('Stripped categoryAxis obj ' + keys[i]);
+                  }
+                }
+                chart.categoryAxis = categoryAxis;
+              }
+            }
+
+            // Create value axis
+
+            /* if we need to create any default values, we should assign them here */
+
+            var addValueAxis = function (a) {
+              var valueAxis = new AmCharts.ValueAxis();
+
+              var keys = Object.keys(a);
               for (var i = 0; i < keys.length; i++) {
-                if (!angular.isObject(o.categoryAxis[keys[i]]) || angular.isArray(o.categoryAxis[keys[i]])) {
-                  categoryAxis[keys[i]] = o.categoryAxis[keys[i]];
-                } else {
-                  console.log('Stripped categoryAxis obj ' + keys[i]);
+                if (typeof a[keys[i]] !== 'object') {
+                  valueAxis[keys[i]] = a[keys[i]];
                 }
               }
-              chart.categoryAxis = categoryAxis;
-            }
-          }
+              chart.addValueAxis(valueAxis);
+            };
 
-          // Create value axis
-
-          /* if we need to create any default values, we should assign them here */
-
-          var addValueAxis = function (a) {
-            var valueAxis = new AmCharts.ValueAxis();
-
-            var keys = Object.keys(a);
-            for (var i = 0; i < keys.length; i++) {
-              if (typeof a[keys[i]] !== 'object') {
-                valueAxis[keys[i]] = a[keys[i]];
+            if (o.valueAxes && o.valueAxes.length > 0) {
+              for (var i = 0; i < o.valueAxes.length; i++) {
+                addValueAxis(o.valueAxes[i]);
               }
             }
-            chart.addValueAxis(valueAxis);
-          };
 
-          if (o.valueAxes && o.valueAxes.length > 0) {
-            for (var i = 0; i < o.valueAxes.length; i++) {
-              addValueAxis(o.valueAxes[i])
+
+            //reusable function to create graph
+            var addGraph = function (g) {
+              var graph = new AmCharts.AmGraph();
+              /** set some default values that amCharts doesnt provide **/
+                // if a category field is not specified, attempt to use the second field from an object in the array as a default value
+              graph.valueField = g.valueField || Object.keys(o.data[0])[1];
+              graph.balloonText = '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
+              if (g) {
+                var keys = Object.keys(g);
+                // iterate over all of the properties in the graph object and apply them to the new AmGraph
+                for (var i = 0; i < keys.length; i++) {
+                  graph[keys[i]] = g[keys[i]];
+                }
+              }
+              chart.addGraph(graph);
+            };
+
+            // create the graphs
+            if (o.graphs && o.graphs.length > 0) {
+              for (var i = 0; i < o.graphs.length; i++) {
+                addGraph(o.graphs[i]);
+              }
+            } else {
+              addGraph();
             }
-          }
 
-
-          //reusable function to create graph
-          var addGraph = function (g) {
-            var graph = new AmCharts.AmGraph();
-            /** set some default values that amCharts doesnt provide **/
-              // if a category field is not specified, attempt to use the second field from an object in the array as a default value
-            graph.valueField = g.valueField || Object.keys(o.data[0])[1];
-            graph.balloonText = '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
-            if (g) {
-              var keys = Object.keys(g);
-              // iterate over all of the properties in the graph object and apply them to the new AmGraph
+            var chartCursor = new AmCharts.ChartCursor();
+            if (o.chartCursor) {
+              var keys = Object.keys(o.chartCursor);
               for (var i = 0; i < keys.length; i++) {
-                graph[keys[i]] = g[keys[i]];
+                if (typeof o.chartCursor[keys[i]] !== 'object') {
+                  chartCursor[keys[i]] = o.chartCursor[keys[i]];
+                }
               }
             }
-            chart.addGraph(graph);
-          };
+            chart.addChartCursor(chartCursor);
 
-          // create the graphs
-          if (o.graphs && o.graphs.length > 0) {
-            for (var i = 0; i < o.graphs.length; i++) {
-              addGraph(o.graphs[i]);
+            if (o.legend){
+                var legend = new AmCharts.AmLegend();
+                var keys = Object.keys(o.legend);
+                for (var i = 0; i < keys.length; i++) {
+                    legend[keys[i]] = o.legend[keys[i]];
+                }
+                chart.legend = legend;
             }
-          } else {
-            addGraph();
-          }
 
-          var chartCursor = new AmCharts.ChartCursor();
-          if (o.chartCursor) {
-            var keys = Object.keys(o.chartCursor);
-            for (var i = 0; i < keys.length; i++) {
-              if (typeof o.chartCursor[keys[i]] !== 'object') {
-                chartCursor[keys[i]] = o.chartCursor[keys[i]];
-              }
-            }
-          }
-          chart.addChartCursor(chartCursor);
-            
-          if (o.legend){
-              var legend = new AmCharts.AmLegend();
-              var keys = Object.keys(o.legend);
+            if (o.chartScrollbar){
+              var scrollbar = new AmCharts.ChartScrollbar();
+              var keys = Object.keys(o.chartScrollbar);
               for (var i = 0; i < keys.length; i++) {
-                  legend[keys[i]] = o.legend[keys[i]];
+                scrollbar[keys[i]] = o.chartScrollbar[keys[i]];
               }
-              chart.legend = legend;
-          }
-            
-          if (o.chartScrollbar){
-            var scrollbar = new AmCharts.ChartScrollbar();
-            var keys = Object.keys(o.chartScrollbar);
-            for (var i = 0; i < keys.length; i++) {
-              scrollbar[keys[i]] = o.chartScrollbar[keys[i]];
+              chart.chartScrollbar = scrollbar;
             }
-            chart.chartScrollbar = scrollbar;
-          }
 
-          // WRITE
-          chart.write(id);
+            // WRITE
+            chart.write(id);
+          });
         };
 
         // Render the chart
@@ -188,7 +192,7 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
         $scope.$on('amCharts.validateNow', function(event, validateData, skipEvents, id){
           if (id === $el[0].id || !id){
             chart.validateNow(validateData === undefined ? true : validateData,
-              skipEvents === undefined ? false : skipEvents)
+              skipEvents === undefined ? false : skipEvents);
           }
         });
 
@@ -199,7 +203,6 @@ angular.module('amChartsDirective', []).directive('amChart', function() {
         });
 
       }
-
     }
   };
-});
+}]);
