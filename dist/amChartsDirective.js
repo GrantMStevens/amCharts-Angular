@@ -1,5 +1,5 @@
 'use strict';
-// 1.0.1
+// 1.0.2
 
 
 angular.module('amChartsDirective', []).directive('amChart', ['$q', function($q) {
@@ -57,7 +57,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function($q)
             chart.marginRight = 0;
 
             // modify default creditsPosition
-            chart.creditsPosition = o.creditsPosition || 'top-right';
+            chart.creditsPosition = 'top-right';
 
             var chartKeys = Object.keys(o);
             for (var i = 0; i < chartKeys.length; i++) {
