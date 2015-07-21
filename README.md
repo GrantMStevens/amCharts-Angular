@@ -25,7 +25,7 @@ angular.module('MyModule', ['amChartsDirective'])
 ```
 
 
-#### [You can play with a working JS Fiddle example here!](http://jsfiddle.net/w3vpc35o/10/)
+#### [You can play with a working JS Fiddle example here!](http://jsfiddle.net/w3vpc35o/29/)
 
 
 #### Quick sample code
