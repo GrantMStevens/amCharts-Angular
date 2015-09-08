@@ -189,7 +189,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                 for (var i = 0;i < o.titles.length;i++) {
                   var title = o.titles[i];
                   chart.addTitle(title.text, title.size, title.color, title.alpha, title.bold);
-                });
+                };
               }
 
               // WRITE
