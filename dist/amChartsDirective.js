@@ -7,8 +7,8 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
     replace: true,
     scope: {
       options: '=',
-      height: '=',
-      width: '='
+      height: '@',
+      width: '@'
     },
     template: '<div class="amchart"></div>',
     link: function ($scope, $el) {
