@@ -7,8 +7,8 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
     replace: true,
     scope: {
       options: '=',
-      height: '=',
-      width: '='
+      height: '@',
+      width: '@'
     },
     template: '<div class="amchart"></div>',
     link: function ($scope, $el) {
@@ -156,17 +156,15 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                   }
                   chart.chartScrollbar = scrollbar;
                 }
+
+                if (o.balloon) {
+                  chart.balloon = o.balloon;
+                }
               }
 
               function generatePieProperties() {
                 if (o.balloon) {
-                  var balloon = new AmBalloon();
-                  var keys = Object.keys(o.chartScrollbar);
-                  var keys = Object.keys(o.chartScrollbar);
-                  for (var i = 0; i < keys.length; i++) {
-                    balloon[keys[i]] = o.balloon[keys[i]];
-                  }
-                  chart.balloon = balloon;
+                  chart.balloon = o.balloon;
                 }
               }
 
@@ -189,7 +187,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                 for (var i = 0;i < o.titles.length;i++) {
                   var title = o.titles[i];
                   chart.addTitle(title.text, title.size, title.color, title.alpha, title.bold);
-                });
+                };
               }
 
               // WRITE
