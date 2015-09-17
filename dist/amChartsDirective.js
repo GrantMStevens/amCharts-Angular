@@ -229,6 +229,10 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
             renderChart(amChartOptions);
           }
         });
+        
+        $scope.$watch('options', function() {
+          renderChart($scope.options);
+        });
       }
     }
   };
