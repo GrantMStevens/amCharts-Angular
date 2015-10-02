@@ -18,8 +18,8 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
       $el.attr('id', id);
       var chart;
 
+			function setup(chartOptions) {
       // we can't render a chart without any data
-      if ($scope.options.data) {
         var renderChart = function (amChartOptions) {
           var o = amChartOptions || $scope.options;
 
@@ -228,6 +228,14 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
           if (id === $el[0].id || !id) {
             renderChart(amChartOptions);
           }
+        });
+      }
+
+      if ($scope.options) {
+        setup($scope.options);
+      } else if ($scope.optionsPromise) {
+        $q.when($scope.optionsPromise.promise).then(function(chartOptions) {
+          setup(chartOptions);
         });
       }
     }
