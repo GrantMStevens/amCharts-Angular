@@ -87,6 +87,10 @@ $scope.amChartOptions = {
     
 #### Example using promises
 
+``` html
+<am-chart id="myFirstChart" options-promise="amChartOptions" height="100%" width="100%"></am-chart>
+```
+
 ```javascript
 var deferredOptions = $q.defer();
 var deferredData = $q.defer();
