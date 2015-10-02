@@ -18,7 +18,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
       $el.attr('id', id);
       var chart;
 
-			function setup(chartOptions) {
+      function setup(chartOptions) {
       // we can't render a chart without any data
         var renderChart = function (amChartOptions) {
           var o = amChartOptions || $scope.options;
