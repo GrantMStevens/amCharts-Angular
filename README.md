@@ -103,6 +103,7 @@ myService.then(function() {
 		deferredData.resolve(data);
 	});
 });
+```
     
 ##### If you do not specify a category field or a value field, the directive will assume the category field is at index [0] and the value field is at index [1]. Using the example above, 'year' would be the category field, and 'income' would be the value field.
     
