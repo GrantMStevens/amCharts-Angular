@@ -26,6 +26,7 @@ angular.module('MyModule', ['amChartsDirective'])
 
 
 #### [JSFiddle Example here](http://jsfiddle.net/w3vpc35o/41/)
+#### [Promise based JSFiddle Example here](http://jsfiddle.net/w3vpc35o/83/)
 
 
 #### Quick sample code
