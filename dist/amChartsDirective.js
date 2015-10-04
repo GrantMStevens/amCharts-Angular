@@ -1,5 +1,5 @@
 'use strict';
-// 1.0.3
+// 1.0.4
 
 angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q) {
   return {
