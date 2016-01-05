@@ -1,0 +1,19 @@
+{
+  "name": "amcharts-angular",
+  "version": "1.0.4",
+  "description": "## [Angular.js](http://angularjs.org) directive for [amCharts](http://www.amcharts.com)",
+  "main": "dist/amChartsDirective.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrantMStevens/amCharts-Angular.git"
+  },
+  "author": "Grant Stevens <grant.stevens007@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GrantMStevens/amCharts-Angular/issues"
+  },
+  "homepage": "https://github.com/GrantMStevens/amCharts-Angular#readme"
+}
