@@ -66,13 +66,6 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                 // modify default creditsPosition
                 chart.creditsPosition = 'top-right';
 
-                var chartKeys = Object.keys(o);
-                for (var i = 0; i < chartKeys.length; i++) {
-                  if (typeof o[chartKeys[i]] !== 'object' && typeof o[chartKeys[i]] !== 'function') {
-                    chart[chartKeys[i]] = o[chartKeys[i]];
-                  }
-                }
-
                 function generateGraphProperties(data) {
                   // Assign Category Axis Properties
                   if (o.categoryAxis) {
@@ -203,6 +196,26 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                 if(o.listeners) {
                   for (var i = 0; i < o.listeners.length; i++) {
                     chart.addListener(o.listeners[i].event, o.listeners[i].method);
+                  }
+                }
+
+                var addEventListeners = function(obj, chartObj) {
+                  for(var i = 0; i < obj.length; i++) {
+                    if (obj[i].listeners) {
+                      var listeners = obj[i].listeners;
+                      for (var l = 0; l < listeners.length; l++) {
+                        chartObj[i].addListener(listeners[l].event, listeners[l].method);
+                      }
+                    }
+                  }
+                };
+
+                var chartKeys = Object.keys(o);
+                for (var i = 0; i < chartKeys.length; i++) {
+                  if (typeof o[chartKeys[i]] !== 'object' && typeof o[chartKeys[i]] !== 'function') {
+                    chart[chartKeys[i]] = o[chartKeys[i]];
+                  } else if (typeof o[chartKeys[i]] === 'object') {
+                    addEventListeners(o[chartKeys[i]], chart[chartKeys[i]]);
                   }
                 }
 
