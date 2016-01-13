@@ -200,6 +200,12 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                   chart.export = o.export;
                 }
 
+                if(o.listeners) {
+                  for (var i = 0; i < o.listeners.length; i++) {
+                    chart.addListener(o.listeners[i].event, o.listeners[i].method);
+                  }
+                }
+
                 // WRITE
                 chart.write(id);
 
