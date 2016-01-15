@@ -136,16 +136,18 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                     addGraph();
                   }
 
-                  var chartCursor = new AmCharts.ChartCursor();
-                  if (o.chartCursor) {
-                    var keys = Object.keys(o.chartCursor);
-                    for (var i = 0; i < keys.length; i++) {
-                      if (typeof o.chartCursor[keys[i]] !== 'object') {
-                        chartCursor[keys[i]] = o.chartCursor[keys[i]];
+                  if (o.type === 'gantt' || o.type === 'serial' || o.type === 'xy') {
+                    var chartCursor = new AmCharts.ChartCursor();
+                    if (o.chartCursor) {
+                      var keys = Object.keys(o.chartCursor);
+                      for (var i = 0; i < keys.length; i++) {
+                        if (typeof o.chartCursor[keys[i]] !== 'object') {
+                          chartCursor[keys[i]] = o.chartCursor[keys[i]];
+                        }
                       }
                     }
+                    chart.addChartCursor(chartCursor);
                   }
-                  chart.addChartCursor(chartCursor);
 
                   if (o.chartScrollbar) {
                     var scrollbar = new AmCharts.ChartScrollbar();
