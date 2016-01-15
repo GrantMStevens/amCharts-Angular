@@ -255,8 +255,13 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
           $scope.$on('amCharts.renderChart', function (event, amChartOptions, id) {
             if (id === $el[0].id || !id) {
+              chart.clear();
               renderChart(amChartOptions);
             }
+          });
+
+          $scope.$on('$destroy', function () {
+            chart.clear();
           });
         }
       });
