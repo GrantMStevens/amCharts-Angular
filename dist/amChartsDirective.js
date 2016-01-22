@@ -96,9 +96,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
                     var keys = Object.keys(a);
                     for (var i = 0; i < keys.length; i++) {
-                      if (typeof a[keys[i]] !== 'object') {
-                        valueAxis[keys[i]] = a[keys[i]];
-                      }
+                      valueAxis[keys[i]] = a[keys[i]];
                     }
                     chart.addValueAxis(valueAxis);
                   };
@@ -109,13 +107,14 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                     }
                   }
 
-
                   //reusable function to create graph
                   var addGraph = function (g) {
                     var graph = new AmCharts.AmGraph();
                     /** set some default values that amCharts doesnt provide **/
-                      // if a category field is not specified, attempt to use the second field from an object in the array as a default value
-                    graph.valueField = g.valueField || Object.keys(o.data[0])[1];
+                    // if a category field is not specified, attempt to use the second field from an object in the array as a default value
+                    if(g && o.data && o.data.length > 0) {
+                      graph.valueField = g.valueField || Object.keys(o.data[0])[1];
+                    }
                     graph.balloonText = '<span style="font-size:14px">[[category]]: <b>[[value]]</b></span>';
                     if (g) {
                       var keys = Object.keys(g);
@@ -193,6 +192,10 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
                 if(o.export) {
                   chart.export = o.export;
+                }
+
+                if(o.colors) {
+                  chart.colors = o.colors;
                 }
 
                 if(o.listeners) {
