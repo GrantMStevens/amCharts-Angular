@@ -1,9 +1,10 @@
 {
   "name": "amcharts-angular",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/ThumbsAlmighty/amCharts-Angular",
   "authors": [
-    "Grant Stevens <grant.stevens007@gmail.com>"
+    "Grant Stevens <grant.stevens007@gmail.com>",
+    "Andrew Yager <andrew@rwts.com.au>"
   ],
   "description": "Angular directive for implementing amCharts",
   "main": "dist/amChartsDirective.js",
@@ -23,6 +24,6 @@
     "tests"
   ],
   "dependencies": {
-    "amcharts": "~3.13.0"
+    "amcharts": "~3.15.2"
   }
 }
