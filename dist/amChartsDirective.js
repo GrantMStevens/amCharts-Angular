@@ -13,8 +13,8 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
     template: '<div class="amchart"></div>',
     link: function ($scope, $el) {
 
-      // use existing outer id to create new id
-      var id = $el[0].id;
+
+      var id = getIdForUseInAmCharts();
       $el.attr('id', id);
       var chart;
 
@@ -271,6 +271,24 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
         }
       });
 
+      function getIdForUseInAmCharts(){
+        var id = $el[0].id;// try to use existing outer id to create new id
+
+        if (!id){//generate a UUID
+          var guid = function guid() {
+            function s4() {
+              return Math.floor((1 + Math.random()) * 0x10000)
+                  .toString(16)
+                  .substring(1);
+            }
+
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+          };
+          id = guid();
+        }
+        return id;
+      }
     }
   };
 }]);
