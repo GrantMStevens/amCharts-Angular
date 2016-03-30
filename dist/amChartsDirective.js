@@ -192,6 +192,11 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
                 if(o.export) {
                   chart.amExport = o.export;
+                  chart.export = o.export;
+                }
+
+                if(o.responsive) {
+                  chart.responsive = o.responsive;
                 }
 
                 if(o.colors) {
