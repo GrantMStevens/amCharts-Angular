@@ -8,7 +8,8 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
     scope: {
       options: '=',
       height: '@',
-      width: '@'
+      width: '@',
+      id: '@'
     },
     template: '<div class="amchart"></div>',
     link: function ($scope, $el) {
@@ -277,7 +278,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
       });
 
       function getIdForUseInAmCharts(){
-        var id = $el[0].id;// try to use existing outer id to create new id
+        var id = $scope.id;// try to use existing outer id to create new id
 
         if (!id){//generate a UUID
           var guid = function guid() {
