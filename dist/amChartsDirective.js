@@ -203,6 +203,10 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                 if(o.colors) {
                   chart.colors = o.colors;
                 }
+                
+                if(o.defs) {
+                  chart.defs = o.defs;
+                }
 
                 if(o.listeners) {
                   for (var i = 0; i < o.listeners.length; i++) {
