@@ -205,7 +205,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                 if(o.colors) {
                   chart.colors = o.colors;
                 }
-                
+
                 if(o.defs) {
                   chart.defs = o.defs;
                 }
@@ -250,13 +250,13 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
           // EVENTS =========================================================================
 
-          $scope.$on('amCharts.triggerChartAnimate', function (event, id) {
+          var onAmChartsTriggerChartAnimate = $scope.$on('amCharts.triggerChartAnimate', function (event, id) {
             if (id === $el[0].id || !id) {
               chart.animateAgain();
             }
           });
 
-          $scope.$on('amCharts.updateData', function (event, data, id) {
+          var onAmChartsUpdateData = $scope.$on('amCharts.updateData', function (event, data, id) {
             if (id === $el[0].id || !id) {
               chart.dataProvider = data;
               chart.validateData();
@@ -264,14 +264,14 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
           });
 
-          $scope.$on('amCharts.validateNow', function (event, validateData, skipEvents, id) {
+          var onAmChartsValidateNow = $scope.$on('amCharts.validateNow', function (event, validateData, skipEvents, id) {
             if (id === $el[0].id || !id) {
               chart.validateNow(validateData === undefined ? true : validateData,
                 skipEvents === undefined ? false : skipEvents);
             }
           });
 
-          $scope.$on('amCharts.renderChart', function (event, amChartOptions, id) {
+          var onAmChartsRenderChart = $scope.$on('amCharts.renderChart', function (event, amChartOptions, id) {
             if (id === $el[0].id || !id) {
               chart.clear();
               renderChart(amChartOptions);
@@ -280,6 +280,11 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
           $scope.$on('$destroy', function () {
             chart.clear();
+            //Unregistering event to prevent slow down;
+            onAmChartsTriggerChartAnimate();
+            onAmChartsUpdateData();
+            onAmChartsValidateNow();
+            onAmChartsRenderChart();
           });
         }
       });
