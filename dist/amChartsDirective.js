@@ -169,6 +169,9 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                   if (o.balloon) {
                     chart.balloon = o.balloon;
                   }
+                  if (o.balloonFunction) {
+                    chart.balloonFunction = o.balloonFunction;
+                  }
                 }
 
                 if (o.legend) {
