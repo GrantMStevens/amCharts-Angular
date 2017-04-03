@@ -46,6 +46,8 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
               chart = o.theme ? new AmCharts.AmFunnelChart(AmCharts.themes[o.theme]) : new AmCharts.AmFunnelChart();
             } else if (o.type === 'radar') {
               chart = o.theme ? new AmCharts.AmRadarChart(AmCharts.themes[o.theme]) : new AmCharts.AmRadarChart();
+            } else if (o.type === 'gauge') {
+              chart = o.theme ? new AmCharts.AmAngularGauge(AmCharts.themes[o.theme]) : new AmCharts.AmAngularGauge();
             } else {
               chart = o.theme ? new AmCharts.AmSerialChart(AmCharts.themes[o.theme]) : new AmCharts.AmSerialChart();
             }
@@ -56,7 +58,9 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
                 chart.dataProvider = data;
                 // if a category field is not specified, attempt to use the first field from an object in the array
-                chart.categoryField = o.categoryField || Object.keys(o.data[0])[0];
+                if(o.type != 'gauge'){
+                  chart.categoryField = o.categoryField || Object.keys(o.data[0])[0];
+                }
                 chart.startDuration = 0.5; // default animation length, because everyone loves a little pizazz
 
                 // AutoMargin is on by default, but the default 20px all around seems to create unnecessary white space around the control
@@ -129,13 +133,31 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                     chart.addGraph(graph);
                   };
 
-                  // create the graphs
-                  if (o.graphs && o.graphs.length > 0) {
-                    for (var i = 0; i < o.graphs.length; i++) {
-                      addGraph(o.graphs[i]);
+                  if(o.type == 'gauge') {
+                    if (o.axes && o.axes.length > 0) {
+                      for (var i = 0; i < o.axes.length; i++) {
+                        var axis = new AmCharts.GaugeAxis();
+                        Object.assign(axis, o.axes[i]);
+                        chart.addAxis(axis);
+                      }
                     }
-                  } else {
-                    addGraph();
+                    if (o.arrows && o.arrows.length > 0) {
+                      for (var i = 0; i < o.arrows.length; i++) {
+                        var arrow = new AmCharts.GaugeArrow();
+                        Object.assign(arrow, o.arrows[i]);
+                        chart.addArrow(arrow);
+                      }
+                    }
+                  }
+                  else {
+                    // create the graphs
+                    if (o.graphs && o.graphs.length > 0) {
+                      for (var i = 0; i < o.graphs.length; i++) {
+                        addGraph(o.graphs[i]);
+                      }
+                    } else {
+                      addGraph();
+                    }
                   }
 
                   if (o.type === 'gantt' || o.type === 'serial' || o.type === 'xy') {
@@ -261,8 +283,16 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
 
           var onAmChartsUpdateData = $scope.$on('amCharts.updateData', function (event, data, id) {
             if (id === $el[0].id || !id) {
-              chart.dataProvider = data;
-              chart.validateData();
+              if($scope.options.type == 'gauge') {
+                if(!Array.isArray(data)) data = [ data ]
+                for(var i = 0; i < data.length; i++) {
+                  chart.arrows[i] && chart.arrows[i].setValue && chart.arrows[i].setValue(data[i]);
+                }
+              }
+              else {
+                chart.dataProvider = data;
+                chart.validateData();
+              }
             }
 
           });
