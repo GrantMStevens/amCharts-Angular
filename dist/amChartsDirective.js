@@ -218,6 +218,10 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                   };
                 }
 
+                if (o.allLabels) { 
+                  chart.allLabels = o.allLabels; 
+                }
+              
                 if(o.export) {
                   chart.amExport = o.export;
                   chart.export = o.export;
