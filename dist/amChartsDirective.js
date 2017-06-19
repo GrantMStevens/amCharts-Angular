@@ -222,6 +222,10 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                   chart.allLabels = o.allLabels; 
                 }
               
+                if (o.labelFunction) {
+                    chart.labelFunction = o.labelFunction;
+                }
+              
                 if(o.export) {
                   chart.amExport = o.export;
                   chart.export = o.export;
