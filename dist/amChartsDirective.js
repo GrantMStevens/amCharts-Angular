@@ -298,7 +298,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
                 }
               }
               else {
-                chart.dataProvider = data;
+                chart.dataProvider = data.data;
                 chart.validateData();
               }
             }
