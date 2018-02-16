@@ -26,7 +26,7 @@ angular.module('amChartsDirective', []).directive('amChart', ['$q', function ($q
         // we can't render a chart without any data
         if (options.data) {
           var renderChart = function (amChartOptions) {
-            var o = amChartOptions || options;
+            var o = amChartOptions ? amChartOptions.$$state ? amChartOptions.$$state.value : amChartOptions || options : amChartOptions || options;
 
             // set height and width
             var height = $scope.height || '100%';
